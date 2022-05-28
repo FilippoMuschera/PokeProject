@@ -1,4 +1,4 @@
-package com.muschera.pokeapifirsttest.model
+package com.androiders.knowthemall.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

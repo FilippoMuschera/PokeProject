@@ -6,34 +6,32 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Card
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.androiders.knowthemall.api.PokeAPI
+import com.androiders.knowthemall.model.MyColor
+import com.androiders.knowthemall.model.Pokemon
+import com.androiders.knowthemall.ui.theme.NetworkImageComponentPicasso
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.androiders.knowthemall.model.MyColor
-import com.muschera.pokeapifirsttest.model.Pokemon
-import com.androiders.knowthemall.ui.theme.NetworkImageComponentPicasso
-import com.androiders.knowthemall.api.PokeAPI
-
-
 
 
 class MainActivity : ComponentActivity() {
@@ -41,8 +39,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            var listaPokemon: List<String> = listOf("bulbasaur","dratini","dialga","mew","mewtwo")
-            nuovaInterfaccia(listaPokemon)
+            var listaPokemon: List<String> =
+                listOf("bulbasaur", "dratini", "dialga", "mew", "mewtwo")
+            NuovaInterfaccia(listaPokemon)
         }
     }
 }
@@ -156,7 +155,7 @@ fun nuovaInterfaccia(list: List<String>){
 }*/
 
 @Composable
-fun nuovaInterfaccia(list: List<String>) {
+fun NuovaInterfaccia(list: List<String>) {
     Surface() {
 
         ConstraintLayout(
@@ -189,11 +188,11 @@ fun nuovaInterfaccia(list: List<String>) {
             val state = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier
-                .constrainAs(column) {
-                top.linkTo(label.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            },
+                    .constrainAs(column) {
+                        top.linkTo(label.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
                 state = state,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
@@ -208,7 +207,7 @@ fun nuovaInterfaccia(list: List<String>) {
 fun ShowPokemons(list: List<String>) {
     var len = list.size
     var i = 0
-    while (i <= len-1){
+    while (i <= len - 1) {
         Row() {
             var modifier = Modifier
                 .padding(6.dp)
@@ -216,11 +215,11 @@ fun ShowPokemons(list: List<String>) {
             ShowPokemon(list[i], modifier)
             i++
 
-            if(i != len) {
+            if (i != len) {
                 var mod = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
-                ShowPokemon(list[i],mod)
+                ShowPokemon(list[i], mod)
                 i++
             }
         }
@@ -229,7 +228,7 @@ fun ShowPokemons(list: List<String>) {
 
 
 @Composable
-fun ShowPokemon(name: String,mod: Modifier) {
+fun ShowPokemon(name: String, mod: Modifier) {
     val p = PokeAPI(LocalContext.current)
     val poke = Pokemon()
     val myPokemon: MutableState<Pokemon> = rememberSaveable {
@@ -248,48 +247,50 @@ fun ShowPokemon(name: String,mod: Modifier) {
     if (myPokemon.value.name != "") {
 
 
+        val myFontFamily = FontFamily(Font(R.font.jbmono_medium))
 
+        val myColor = rememberSaveable {
+            mutableStateOf(MyColor())
+        }
 
-            val myFontFamily = FontFamily(Font(R.font.jbmono_medium))
+        Card(
+            elevation = 4.dp,
+            backgroundColor = myColor.value.myColor,
+            modifier = mod
+        ) {
 
-            val myColor = rememberSaveable {
-                mutableStateOf(MyColor())
-            }
-
-            Card(
-                elevation = 4.dp,
-                backgroundColor = myColor.value.myColor,
-                modifier = mod
+            Column(
+                Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Column(
-                    Modifier
-                        .padding(4.dp)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                //In teoria avendo i colori nel db ora questa parte può/deve essere modificata
 
-                    //In teoria avendo i colori nel db ora questa parte può/deve essere modificata
+                NetworkImageComponentPicasso(
+                    url = p.getImage(myPokemon.value.id),
+                    myColor = myColor
+                )
 
-                    NetworkImageComponentPicasso(url = p.getImage(myPokemon.value.id), myColor = myColor)
-
-                    Text(
-                        text = myPokemon.value.name[0].uppercase() + myPokemon.value.name.substring(1),
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .background(Color.White, RectangleShape),
-                        fontFamily = myFontFamily
-                    )
-
-                }
+                Text(
+                    text = myPokemon.value.name[0].uppercase() + myPokemon.value.name.substring(1),
+                    color = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .background(Color.White, RectangleShape),
+                    fontFamily = myFontFamily
+                )
 
             }
 
+        }
+
 
     }
 
 
-    }
+}
 
 
 

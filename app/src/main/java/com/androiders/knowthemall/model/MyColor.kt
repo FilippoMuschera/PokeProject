@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
 @Parcelize
-data class MyColor( var myColor: @RawValue Color): Parcelable {
-    constructor(): this(Color.White)
+data class MyColor(var myColor: @RawValue Color) : Parcelable {
+    constructor() : this(Color.White)
 }

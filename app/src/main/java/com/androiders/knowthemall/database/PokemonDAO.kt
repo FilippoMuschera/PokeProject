@@ -1,5 +1,6 @@
 package com.androiders.knowthemall.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.androiders.knowthemall.model.PokemonBase
@@ -9,7 +10,7 @@ interface PokemonDAO {
 
 
     @Query("SELECT * FROM Pokemon")
-    fun getAllPokemonBase(): List<PokemonBase>
+    fun getAllPokemonBase(): LiveData<List<PokemonBase>>
 
     /*
     Per fare una ricerca di un pokemon con solo parte del nome, passare alla funzione la stringa
@@ -20,7 +21,6 @@ interface PokemonDAO {
     fun getPokemonBase(pokemonName: String): PokemonBase //Il nome NON è case sensitive: Bulbasaur = bulbasaur
 
 
-
     @Query("UPDATE Pokemon SET favourite = 1 WHERE id = :pokemonID")
     fun setFavourite(pokemonID: Int)
 
@@ -28,9 +28,10 @@ interface PokemonDAO {
     fun removeFavourite(pokemonID: Int)
 
     @Query("SELECT * FROM Pokemon WHERE favourite = 1")
-    fun getAllFavourites(): List<PokemonBase>
+    fun getAllFavourites(): LiveData<List<PokemonBase>>
 
-
+    @Query("SELECT * FROM Pokemon LIMIT 99")
+    fun testList(): LiveData<List<PokemonBase>>
 
 
 }

@@ -42,8 +42,11 @@ class PokeAPI(private val context: Context) {
         queue.add(stringRequest)
     }
 
-    fun getImage(id: Int) : String {
+    fun getImage(id: Int): String { //TODO QUESTA VA TOLTA E SOSTITUITA CON getUrl(id: Int)
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
     }
 
+
 }
+
+

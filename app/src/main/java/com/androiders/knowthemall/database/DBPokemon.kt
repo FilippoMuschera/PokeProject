@@ -12,26 +12,26 @@ import com.androiders.knowthemall.model.PokemonBase
     version = 1
 )
 
-abstract class DBPokemon:RoomDatabase() {
-companion object {
-    private var db: DBPokemon? = null //Singleton
-    fun getInstance(context: Context): DBPokemon {
-        if (db == null) {
-            db = Room.databaseBuilder(
-                context.applicationContext,
-                DBPokemon::class.java,
-                "pokemon.db"
-            )
-                .createFromAsset("pokemonv2.db")
-                .allowMainThreadQueries() //TODO SOLO PER TEST, VA TOLTO
-                .build()
-        }
+abstract class DBPokemon : RoomDatabase() {
+    companion object {
+        private var db: DBPokemon? = null //Singleton
+        fun getInstance(context: Context): DBPokemon {
+            if (db == null) {
+                db = Room.databaseBuilder(
+                    context.applicationContext,
+                    DBPokemon::class.java,
+                    "pokemon.db"
+                )
+                    .createFromAsset("pokemonv2.db")
+                    .allowMainThreadQueries() //TODO SOLO PER TEST, VA TOLTO
+                    .build()
+            }
 
             return db as DBPokemon
         }
     }
 
-    abstract fun pokemonDAO():PokemonDAO
+    abstract fun pokemonDAO(): PokemonDAO
 
 }
 
