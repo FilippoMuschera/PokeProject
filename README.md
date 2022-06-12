@@ -1,3 +1,3 @@
 # PokeProject
 
-https://docs.google.com/spreadsheets/d/1QP-YhAkvqzz4WecG-OzEXlMHWp_ddEM0KC-Rt5nOtPk/edit?usp=sharing
+https://drive.google.com/drive/folders/1DI9GUYw2wDqaeYJy9jySnMXVfmlHhCvx?usp=sharing
